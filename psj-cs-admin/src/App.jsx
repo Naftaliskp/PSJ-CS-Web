@@ -10,7 +10,6 @@ import Informasi from './page/informasi/Informasipage'
 import Article from './page/information/Article'
 import Keluhan from './page/keluhan/keluhanpage'
 import Footer from './components/Footer'
-import Pengaduan from './page/pengaduan/Pengaduanpage'
 import Navigation from './components/Navigation'
 
 function App() {
@@ -25,7 +24,6 @@ function App() {
               <Route path='/informasi' element={<Informasi/>}/>
               <Route path='/keluhan' element={<Keluhan/>}/>
               <Route path='/login' element={<Login/>} />
-              <Route path='/FormPengaduan' element={<Pengaduan/>} />
               <Route path='/article' element={<Article/>} />
           </Routes>
           <Footer/>

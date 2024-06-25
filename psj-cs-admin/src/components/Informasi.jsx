@@ -1,76 +1,122 @@
-import { useState } from "react";
-
-import "./Informasi.css";
-import { Table } from "./informasi/InformasiTable";
-import { Modal } from "./informasi/InformasiModal";
+import React, { useState } from 'react';
+import { Modal, Button, Form } from 'react-bootstrap';
 
 function Informasi() {
-  const [modalOpen, setModalOpen] = useState(false);
-  const [rows, setRows] = useState([
-    {
-      judul: "Info 1",
-      tanggal: "17 Juni 2024",
-      isi: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    },
-    {
-      judul: "Info 2",
-      tanggal: "16 Juni 2024",
-      isi: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    },
-    {
-      judul: "Info 3",
-      tanggal: "15 Juni 2024",
-      isi: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    },
-    {
-      judul: "Info 4",
-      tanggal: "14 Juni 2024",
-      isi: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    },
-  ]);
-  const [rowToEdit, setRowToEdit] = useState(null);
+  const [data, setData] = useState([]);
+  const [show, setShow] = useState(false);
+  const [currentRow, setCurrentRow] = useState({ id: null, judul: '', tanggal: '', isi: '' });
+  const [editing, setEditing] = useState(false);
 
-  const handleDeleteRow = (targetIndex) => {
-    setRows(rows.filter((_, idx) => idx !== targetIndex));
+  const handleShow = () => setShow(true);
+  const handleClose = () => setShow(false);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setCurrentRow({ ...currentRow, [name]: value });
   };
 
-  const handleEditRow = (idx) => {
-    setRowToEdit(idx);
-
-    setModalOpen(true);
+  const handleAddRow = () => {
+    setData([...data, { ...currentRow, id: data.length + 1 }]);
+    setCurrentRow({ id: null, judul: '', tanggal: '', isi: '' });
+    handleClose();
   };
 
-  const handleSubmit = (newRow) => {
-    rowToEdit === null
-      ? setRows([...rows, newRow])
-      : setRows(
-          rows.map((currRow, idx) => {
-            if (idx !== rowToEdit) return currRow;
+  const handleEditRow = (row) => {
+    setCurrentRow(row);
+    setEditing(true);
+    handleShow();
+  };
 
-            return newRow;
-          })
-        );
+  const handleUpdateRow = () => {
+    setData(data.map(row => (row.id === currentRow.id ? currentRow : row)));
+    setCurrentRow({ id: null, judul: '', tanggal: '', isi: '' });
+    setEditing(false);
+    handleClose();
+  };
+
+  const handleDeleteRow = (id) => {
+    setData(data.filter(row => row.id !== id));
   };
 
   return (
-    <div className="Informasi">
-      <Table rows={rows} deleteRow={handleDeleteRow} editRow={handleEditRow} />
-      <button onClick={() => setModalOpen(true)} className="btn btn-danger">
-        Tambah Informasi
-      </button>
-      {modalOpen && (
-        <Modal
-          closeModal={() => {
-            setModalOpen(false);
-            setRowToEdit(null);
-          }}
-          onSubmit={handleSubmit}
-          defaultValue={rowToEdit !== null && rows[rowToEdit]}
-        />
-      )}
+    <div className="container mt-3 mb-5">
+      <Button variant="primary" onClick={handleShow}>Tambah Informasi</Button>
+      <table className="table my-3">
+        <thead>
+          <tr>
+            <th>Actions</th>
+            <th>ID</th>
+            <th>Judul</th>
+            <th>Tanggal</th>
+            <th className="expand">Isi</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map(row => (
+            <tr key={row.id}>
+              <td>
+                <Button variant="warning" onClick={() => handleEditRow(row)}>Edit</Button>
+                <Button variant="danger" onClick={() => handleDeleteRow(row.id)}>Delete</Button>
+              </td>
+              <td>{row.id}</td>
+              <td>{row.judul}</td>
+              <td>{row.tanggal}</td>
+              <td className="expand">{row.isi}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>{editing ? 'Edit Row' : 'Add Row'}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group className="mb-3" controlId="formJudul">
+              <Form.Label>Judul</Form.Label>
+              <Form.Control
+                type="text"
+                name="judul"
+                value={currentRow.judul}
+                onChange={handleInputChange}
+                placeholder="Enter judul"
+              />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formTanggal">
+              <Form.Label>Tanggal</Form.Label>
+              <Form.Control
+                type="date"
+                name="tanggal"
+                value={currentRow.tanggal}
+                onChange={handleInputChange}
+                placeholder="Enter tanggal"
+              />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formIsi">
+              <Form.Label>Isi</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={3}
+                name="isi"
+                value={currentRow.isi}
+                onChange={handleInputChange}
+                placeholder="Enter isi"
+              />
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>Close</Button>
+          <Button variant="primary" onClick={editing ? handleUpdateRow : handleAddRow}>
+            {editing ? 'Update' : 'Add'}
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }
+
 
 export default Informasi;
 

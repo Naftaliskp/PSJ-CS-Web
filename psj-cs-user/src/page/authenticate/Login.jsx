@@ -5,52 +5,36 @@ import { API_KEY_USER, API_KEY_COMPANY, KEY_SESSION  } from '../../env/env'
 import { loginSession } from '../../redux/action/userSession'
 import { Container, Row, Card, Col, Form, Button } from 'react-bootstrap'
 import axios from 'axios'
+import PropTypes from 'prop-types';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 
-const MySwal = withReactContent(Swal)
 
-function Login() {
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
-    const state = useSelector( state => state.userSession );
+async function loginUser(credentials) {
+    return fetch('http://192.168.100.52:5000/api/login/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(credentials)
+    })
+      .then(data => data.json())
+   }
+
+export default function Login({ setToken }) {
+    const [ email, setEmail ] = useState();
     const [ password, setPassword ] = useState();
+    // const navigate = useNavigate();
 
-    const createSessionObj = async (password, form) => {
-        const resUser = await axios.get(API_KEY_USER);
-        const users = resUser.data;
-
-        const resCompany = await axios.get(API_KEY_COMPANY);
-        const companies = resCompany.data;
-
-        const findUser = users.findIndex( index => index.email == email && index.password == password );
-        const findCompany = companies.findIndex( index => index.company_email == email && index.company_password == password );
-
-        if(findUser !== -1) {
-            const findUserSession = users.find( index => index.email == email && index.password == password );
-        
-            localStorage.setItem(KEY_SESSION, JSON.stringify(findUserSession));
-            dispatch(loginSession(findUserSession));
-            navigate('/');
-        }else if(findCompany !== -1) {
-            const findCompanySession = companies.find( index => index.company_email == email && index.company_password == password );
-            localStorage.setItem(KEY_SESSION, JSON.stringify(findCompanySession));
-            dispatch(loginSession(findCompanySession));
-            navigate('/dashboard');
-        }else {
-           return MySwal.fire({
-                icon: 'error',
-                title: 'Login Gagal',
-                text: 'Maaf email dan password yang anda masukan tidak cocok dengan akun manapun!',
-            })
-        }
-        
-    }
-
-    const handleLogin = (e) => {
+    const handleSubmit = async e => {
         e.preventDefault();
-        createSessionObj(email, password, e.target);
-    }
+        const token = await loginUser({
+          "email": email,
+          "pwd": password
+        });
+        setToken(token);
+        // navigate('/');
+      }
 
   return (
         <Container fluid className='authenticate py-5' >
@@ -58,7 +42,7 @@ function Login() {
                     <Card className='col-12 col-sm-10 mx-auto rounded shadow-lg' >
                         <Row className='d-flex justify-content-start'>
                             <Col xs={10} md={5} className='p-3 mx-auto my-auto'>
-                                <Form onSubmit={ handleLogin } >
+                            <Form onSubmit={ handleSubmit } >
                                 <h1 className='mt-5'>Login</h1>
                                     <Form.Group className='mb-5'>
                                         <div className='group'>
@@ -91,4 +75,8 @@ function Login() {
 )
 }
 
-export default Login
+Login.propTypes = {
+    setToken: PropTypes.func.isRequired
+};
+
+// export default Login

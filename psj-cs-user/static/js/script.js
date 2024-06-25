@@ -35,14 +35,14 @@ window.addEventListener('load', () => {
 
     // initiate the modal for displaying the charts,
     // if you dont have charts, then you comment the below line
-    $(".modal").modal();
+    // $(".modal").modal();
 
     // enable this if u have configured the bot to start the conversation.
-    // showBotTyping();
-    // $("#userInput").prop('disabled', true);
+    showBotTyping();
+    $("#userInput").prop('disabled', true);
 
     // if you want the bot to start the conversation
-    // customActionTrigger();
+    actionTrigger();
   });
   // Toggle the chatbot screen
   $("#profile_div").click(() => {

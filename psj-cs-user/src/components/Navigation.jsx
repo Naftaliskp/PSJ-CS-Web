@@ -8,11 +8,14 @@ import Logo from '../assets/image/psj-logo.png'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import { FaSignInAlt, FaSignOutAlt } from 'react-icons/fa'
+import useToken from '../page/homepage/useToken'
 
 const MySwal = withReactContent(Swal)
 
 const linkStyle = { color: '#dc3545', fontWeight: 'bold', borderBottom: '3px solid #dc3545', backgroundColor: '#FFFFFF' }
 function Navigation() {
+
+// const { token, setToken } = useToken();
 
  const navigate = useNavigate()
  const dispatch = useDispatch();
@@ -29,7 +32,7 @@ function Navigation() {
     }).then((result) => {
       if (result.isConfirmed) {
         dispatch(logOut());
-        localStorage.removeItem(KEY_SESSION);
+        localStorage.removeItem('token');
         MySwal.fire({
           icon: 'success',
           title: 'Berhasil Logout!'
@@ -55,7 +58,7 @@ function Navigation() {
 
               <NavLink to="/FormPengaduan" style={({isActive}) => (isActive ? linkStyle : undefined)} className='nav-item text-danger mb-1 mx-3' > Form Pengaduan  </NavLink>
                 {/* <NavLink className='nav-item text-dark p-2 me-3' to="#pricing">Profile</NavLink> */}
-                { isLogin==false ? (
+                { (!isLogin) ? (
                 <NavLink to='/login' className='btn btn-danger' ><FaSignInAlt className='me-2'/>Login</NavLink>
                 ): (
                 <Nav.Link onClick={ () => logout() } className='btn btn-danger text-light'><FaSignOutAlt className='me-2 '/>Logout</Nav.Link>

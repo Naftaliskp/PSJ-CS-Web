@@ -237,7 +237,7 @@ async function send(message) {
   console.log(message);
   await new Promise((r) => setTimeout(r, 2000));
   $.ajax({
-    url: "http://192.168.18.1:5000/chat",
+    url: "http://192.168.100.52:5000/api/chat/",
     type: "POST",
     contentType: "application/json",
     data: JSON.stringify({ user_input: message}),

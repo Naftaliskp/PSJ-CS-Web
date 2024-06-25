@@ -10,9 +10,14 @@ import Footer from './components/Footer'
 import Pengaduan from './page/pengaduan/Pengaduanpage'
 import CekData from './page/homepage/CekDataPage'
 import Navigation from './components/Navigation'
+import useToken from './page/homepage/useToken'
 
 function App() {
+  // const [token, setToken] = useState();
 
+  // if(!token) {
+  //   return <Login setToken={setToken} />
+  // }
 
   return (
     <div className="App">

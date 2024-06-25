@@ -38,7 +38,7 @@ function Navigation() {
           title: 'Berhasil Logout!'
         }
         )
-        navigate('/login');
+        navigate('/');
       }
     })
 
@@ -54,13 +54,13 @@ function Navigation() {
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="d-flex w-100 align-items-center justify-content-end">
-              <NavLink to="/" style={({isActive}) => (isActive ? linkStyle : undefined)} className='nav-item text-danger mb-1 mx-3' >  User </NavLink>
+              <NavLink to="/user" style={({isActive}) => (isActive ? linkStyle : undefined)} className='nav-item text-danger mb-1 mx-3' >  User </NavLink>
               <NavLink to="/penghuni" style={({isActive}) => (isActive ? linkStyle : undefined)} className='nav-item text-danger mb-1 mx-3' >  Data Penghuni </NavLink>
               <NavLink to="/informasi" style={({isActive}) => (isActive ? linkStyle : undefined)} className='nav-item text-danger mb-1 mx-3' >  Informasi </NavLink>
               <NavLink to="/keluhan" style={({isActive}) => (isActive ? linkStyle : undefined)} className='nav-item text-danger mb-1 mx-3' >  Keluhan </NavLink>
                 {/* <NavLink className='nav-item text-dark p-2 me-3' to="#pricing">Profile</NavLink> */}
                 { session==false ? (
-                <NavLink to='/login' className='btn btn-danger' ><FaSignInAlt className='me-2'/>Login</NavLink>
+                <NavLink to='/' className='btn btn-danger' ><FaSignInAlt className='me-2'/>Login</NavLink>
                 ): (
                 <Nav.Link onClick={ () => logout() } className='btn btn-danger text-light'><FaSignOutAlt className='me-2 '/>Logout</Nav.Link>
                 ) }

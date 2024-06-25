@@ -37,11 +37,11 @@ useEffect( () => {
     <div className="App">
         <Navigation/>
           <Routes>
-              <Route path='/' element={<User/>} />
+              <Route path='/' element={<Login/>} />
               <Route path='/penghuni' element={<Penghuni/>} />
               <Route path='/informasi' element={<Informasi/>}/>
               <Route path='/keluhan' element={<Keluhan/>}/>
-              <Route path='/login' element={<Login/>} />
+              <Route path='/user' element={<User/>} />
               <Route path='/article' element={<Article/>} />
           </Routes>
           <Footer/>

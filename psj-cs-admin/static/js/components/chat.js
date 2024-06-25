@@ -237,7 +237,7 @@ async function send(message) {
   console.log(message);
   await new Promise((r) => setTimeout(r, 2000));
   $.ajax({
-    url: "http://192.168.100.52:5000/api/chat/",
+    url: "http://192.168.16.248:5000/api/chat/",
     type: "POST",
     contentType: "application/json",
     data: JSON.stringify({ user_input: message}),
@@ -249,7 +249,7 @@ async function send(message) {
         $("#userInput").prop("disabled", false);
 
         // if you want the bot to start the conversation after restart
-        // customActionTrigger();
+        actionTrigger();
         return;
       }
       setBotResponse(botResponse);
@@ -258,8 +258,8 @@ async function send(message) {
       if (message.toLowerCase() === "/restart") {
         $("#userInput").prop("disabled", false);
         // if you want the bot to start the conversation after the restart action.
-        // actionTrigger();
-        // return;
+        actionTrigger();
+        return;
       }
 
       // if there is no response from rasa server, set error bot response
@@ -277,19 +277,17 @@ async function send(message) {
 // eslint-disable-next-line no-unused-vars
 function actionTrigger() {
   $.ajax({
-    url: `http://localhost:5005/conversations/${sender_id}/execute`,
+    url: "http://192.168.16.248:5000/api/chat/",
     type: "POST",
     contentType: "application/json",
     data: JSON.stringify({
-      name: action_name,
-      policy: "MappingPolicy",
-      confidence: "0.98",
+      user_input: "hi"
     }),
     success(botResponse, status) {
       console.log("Response from Rasa: ", botResponse, "\nStatus: ", status);
 
-      if (Object.hasOwnProperty.call(botResponse, "messages")) {
-        setBotResponse(botResponse.messages);
+      if (Object.hasOwnProperty.call(botResponse, "text")) {
+        setBotResponse(botResponse);
       }
       $("#userInput").prop("disabled", false);
     },
@@ -314,20 +312,17 @@ function actionTrigger() {
 // eslint-disable-next-line no-unused-vars
 function customActionTrigger() {
   $.ajax({
-    url: "http://localhost:5055/webhook/",
+    url: "http://192.168.16.248:5000/api/chat/",
     type: "POST",
     contentType: "application/json",
     data: JSON.stringify({
-      next_action: action_name,
-      tracker: {
-        sender_id,
-      },
+      user_input: "hi"
     }),
     success(botResponse, status) {
       console.log("Response from Rasa: ", botResponse, "\nStatus: ", status);
 
-      if (Object.hasOwnProperty.call(botResponse, "responses")) {
-        setBotResponse(botResponse.responses);
+      if (Object.hasOwnProperty.call(botResponse, "text")) {
+        setBotResponse(botResponse);
       }
       $("#userInput").prop("disabled", false);
     },

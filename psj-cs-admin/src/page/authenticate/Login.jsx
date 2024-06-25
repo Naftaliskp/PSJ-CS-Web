@@ -1,49 +1,53 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { useSelector, useDispatch } from 'react-redux'
-import { API_KEY_USER, API_KEY_COMPANY, KEY_SESSION  } from '../../env/env'
-import { loginSession } from '../../redux/action/userSession'
+import { useDispatch } from 'react-redux'
+import { getSession } from '../../redux/action/userSession'
 import { Container, Row, Card, Col, Form, Button } from 'react-bootstrap'
+import Logo from '../../assets/image/psj-logo.png'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import Navigation from '../../components/Navigation'
+import Footer from '../../components/Footer'
 
 const MySwal = withReactContent(Swal)
 
 function Login() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const state = useSelector( state => state.userSession );
+    const [ loading, setLoading ] = useState(false);
+    const [ email, setEmail ] = useState();
     const [ password, setPassword ] = useState();
 
-    const createSessionObj = async (password, form) => {
-        const resUser = await axios.get(API_KEY_USER);
-        const users = resUser.data;
+    useEffect( () => {
+        window.scrollTo(0, 0);
+    },[] )
 
-        const resCompany = await axios.get(API_KEY_COMPANY);
-        const companies = resCompany.data;
-
-        const findUser = users.findIndex( index => index.email == email && index.password == password );
-        const findCompany = companies.findIndex( index => index.company_email == email && index.company_password == password );
-
-        if(findUser !== -1) {
-            const findUserSession = users.find( index => index.email == email && index.password == password );
-        
-            localStorage.setItem(KEY_SESSION, JSON.stringify(findUserSession));
-            dispatch(loginSession(findUserSession));
-            navigate('/');
-        }else if(findCompany !== -1) {
-            const findCompanySession = companies.find( index => index.company_email == email && index.company_password == password );
-            localStorage.setItem(KEY_SESSION, JSON.stringify(findCompanySession));
-            dispatch(loginSession(findCompanySession));
-            navigate('/dashboard');
-        }else {
-           return MySwal.fire({
-                icon: 'error',
-                title: 'Login Gagal',
-                text: 'Maaf email dan password yang anda masukan tidak cocok dengan akun manapun!',
+    const createSessionObj = async (email, password, form) => {
+       try{
+            setLoading(true);
+            const response = await axios.post('http://192.168.16.248/api/login/', {
+                "email": email,
+                "pwd": password
             })
-        }
+            const data = response.data;
+            if(data.data) {
+                document.cookie = `token=${data.token}`;
+                dispatch(getSession(data.token));
+                            MySwal.fire({
+                                icon: 'success',
+                                title: 'Berhasil Login!',
+                            })
+                            navigate('/')
+                }else {
+                    return response;
+                }
+       } catch(error ){
+        MySwal.fire({
+            icon: 'warning',
+            title: error.response.data.message.msg || 'Akun tidak ditemukan, periksa kembali email dan passwordmu!',
+        })
+       } 
         
     }
 
@@ -53,16 +57,20 @@ function Login() {
     }
 
   return (
+    <>
         <Container fluid className='authenticate py-5' >
                 <Row>
                     <Card className='col-12 col-sm-10 mx-auto rounded shadow-lg' >
                         <Row className='d-flex justify-content-start'>
-                            <Col xs={10} md={5} className='p-3 mx-auto my-auto'>
+                            <Col xs={10} md={5} className='p-3 mx-auto'>
+                                <div className='text-center my-3'>
+                                    <img src={Logo} width='150' />
+                                    <h1 className='fw-bolder text-dark mt-2'>LOGIN</h1>
+                                </div>
                                 <Form onSubmit={ handleLogin } >
-                                <h1 className='mt-5'>Login</h1>
                                     <Form.Group className='mb-5'>
                                         <div className='group'>
-                                            <input required type='email' onChange={ (e) => setEmail(e.target.value) } className='input w-100 mt-4' />
+                                            <input required type='email' onChange={ (e) => setEmail(e.target.value) } className='input w-100' />
                                             <span className='highlight'></span>
                                             <span className='bar w-100'></span>
                                             <label className='label-input'>Email</label>
@@ -80,7 +88,8 @@ function Login() {
                                         <Link>
                                         <p className='text-danger'>Lupa Password?</p>
                                         </Link>
-                                        <Button variant='danger' type='submit' className='w-100 my-2'>Log in</Button>
+                                        <Button variant='danger' type='submit' className='w-100 mb-2'>Log in</Button>
+                                        {/* <Link to='/' className='btn btn-danger w-100 mb-2'>Sign-in</Link> */}
                                     </Form.Group>
                                 </Form>
                             </Col>
@@ -88,6 +97,8 @@ function Login() {
                     </Card>
                 </Row>
         </Container>
+
+    </>
 )
 }
 

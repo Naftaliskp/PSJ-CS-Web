@@ -11,15 +11,15 @@ function include(file) {
 
 
 // Bot pop-up intro
-// document.addEventListener("DOMContentLoaded", () => {
-//   const elemsTap = document.querySelector(".tap-target");
-//   // eslint-disable-next-line no-undef
-//   const instancesTap = M.TapTarget.init(elemsTap, {});
-//   instancesTap.open();
-//   setTimeout(() => {
-//     instancesTap.close();
-//   }, 4000);
-// });
+document.addEventListener("DOMContentLoaded", () => {
+  const elemsTap = document.querySelector(".tap-target");
+  // eslint-disable-next-line no-undef
+  const instancesTap = M.TapTarget.init(elemsTap, {});
+  instancesTap.open();
+  setTimeout(() => {
+    instancesTap.close();
+  }, 4000);
+});
 
 /* import components */
 include('./static/js/components/index.js');
@@ -35,14 +35,14 @@ window.addEventListener('load', () => {
 
     // initiate the modal for displaying the charts,
     // if you dont have charts, then you comment the below line
-    $(".modal").modal();
+    // $(".modal").modal();
 
     // enable this if u have configured the bot to start the conversation.
-    // showBotTyping();
-    // $("#userInput").prop('disabled', true);
+    showBotTyping();
+    $("#userInput").prop('disabled', true);
 
     // if you want the bot to start the conversation
-    // customActionTrigger();
+    actionTrigger();
   });
   // Toggle the chatbot screen
   $("#profile_div").click(() => {

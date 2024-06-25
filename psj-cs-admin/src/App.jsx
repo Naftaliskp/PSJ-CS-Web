@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React, { useEffect, useState  } from 'react';
 import reactLogo from './assets/react.svg'
 import './App.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -11,11 +11,29 @@ import Article from './page/information/Article'
 import Keluhan from './page/keluhan/keluhanpage'
 import Footer from './components/Footer'
 import Navigation from './components/Navigation'
+import { useSelector, useDispatch } from 'react-redux'
+import { getSession } from './redux/action/userSession'
+import { getCookie } from './cookie/cookie'
+import Loading from './components/loader/Loading'
 
 function App() {
+  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(true);
 
+useEffect( () => {
+  const token = getCookie('token');
+  if(token) {
+    dispatch(getSession(token, setIsLoading));
+  }else {
+    setIsLoading(false);
+  }
+},[] )
 
   return (
+    <>
+    { isLoading ? (
+      <Loading/>
+    ) : (
     <div className="App">
         <Navigation/>
           <Routes>
@@ -29,6 +47,10 @@ function App() {
           <Footer/>
     </div>
   )
+}
+</>
+  )
+
 }
 
 export default App

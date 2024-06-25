@@ -21,11 +21,6 @@ function Informasi() {
     handleClose();
   };
 
-  const handleEditRow = (row) => {
-    setCurrentRow(row);
-    setEditing(true);
-    handleShow();
-  };
 
   const handleUpdateRow = () => {
     setData(data.map(row => (row.id === currentRow.id ? currentRow : row)));
@@ -55,7 +50,6 @@ function Informasi() {
           {data.map(row => (
             <tr key={row.id}>
               <td>
-                <Button variant="warning" onClick={() => handleEditRow(row)}>Edit</Button>
                 <Button variant="danger" onClick={() => handleDeleteRow(row.id)}>Delete</Button>
               </td>
               <td>{row.id}</td>
@@ -81,6 +75,7 @@ function Informasi() {
                 value={currentRow.judul}
                 onChange={handleInputChange}
                 placeholder="Enter judul"
+                required
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formTanggal">
@@ -91,6 +86,7 @@ function Informasi() {
                 value={currentRow.tanggal}
                 onChange={handleInputChange}
                 placeholder="Enter tanggal"
+                required
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formIsi">
@@ -102,6 +98,7 @@ function Informasi() {
                 value={currentRow.isi}
                 onChange={handleInputChange}
                 placeholder="Enter isi"
+                required
               />
             </Form.Group>
           </Form>

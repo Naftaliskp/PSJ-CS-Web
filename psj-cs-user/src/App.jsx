@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React, { useEffect, useState  } from 'react';
 import reactLogo from './assets/react.svg'
 import './App.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -11,15 +11,30 @@ import Pengaduan from './page/pengaduan/Pengaduanpage'
 import CekData from './page/homepage/CekDataPage'
 import Navigation from './components/Navigation'
 import useToken from './page/homepage/useToken'
+import { useSelector, useDispatch } from 'react-redux'
+import { getSession } from './redux/action/userSession'
+import { getCookie } from './cookie/cookie'
+import Loading from './components/loader/Loading'
+
 
 function App() {
-  // const [token, setToken] = useState();
+  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(true);
 
-  // if(!token) {
-  //   return <Login setToken={setToken} />
-  // }
+useEffect( () => {
+  const token = getCookie('token');
+  if(token) {
+    dispatch(getSession(token, setIsLoading));
+  }else {
+    setIsLoading(false);
+  }
+},[] )
 
   return (
+    <>
+    { isLoading ? (
+      <Loading/>
+    ) : (
     <div className="App">
         <Navigation/>
           <Routes>
@@ -32,6 +47,10 @@ function App() {
           <Footer/>
     </div>
   )
+}
+</>
+  )
+
 }
 
 export default App

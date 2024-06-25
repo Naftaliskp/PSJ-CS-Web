@@ -8,7 +8,11 @@ function Keluhan() {
   const [editing, setEditing] = useState(false);
 
   const handleShow = () => setShow(true);
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setShow(false);
+    setEditing(false);
+    setCurrentRow({ id: null, sender: '', alamat: '', keluhan: '', status: 'pending' });
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -28,15 +32,12 @@ function Keluhan() {
   };
 
   const handleUpdateRow = () => {
-    setData(data.map(row => (row.id === currentRow.id ? currentRow : row)));
+    setData(data.map(row => (row.id === currentRow.id ? { ...row, status: currentRow.status } : row)));
     setCurrentRow({ id: null, sender: '', alamat: '', keluhan: '', status: 'pending' });
     setEditing(false);
     handleClose();
   };
 
-  const handleDeleteRow = (id) => {
-    setData(data.filter(row => row.id !== id));
-  };
 
   const getStatusStyle = (status) => {
     switch (status) {
@@ -59,9 +60,9 @@ function Keluhan() {
       <table className="table mt-3">
         <thead>
           <tr>
+            <th>ID</th>
             <th>Actions</th>
             <th>Status</th>
-            <th>ID</th>
             <th>Sender</th>
             <th>Alamat</th>
             <th className="expand">Keluhan</th>
@@ -70,12 +71,11 @@ function Keluhan() {
         <tbody>
           {data.map(row => (
             <tr key={row.id}>
+              <td>{row.id}</td>
               <td>
                 <Button variant="warning" onClick={() => handleEditRow(row)}>Edit</Button>
-                <Button variant="danger" onClick={() => handleDeleteRow(row.id)}>Delete</Button>
               </td>
               <td style={getStatusStyle(row.status)}>{row.status}</td>
-              <td>{row.id}</td>
               <td>{row.sender}</td>
               <td>{row.alamat}</td>
               <td className="expand">{row.keluhan}</td>
@@ -86,41 +86,48 @@ function Keluhan() {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>{editing ? 'Edit Row' : 'Add Row'}</Modal.Title>
+          <Modal.Title>{editing ? 'Edit Status' : 'Add Row'}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
-            <Form.Group className="mb-3" controlId="formSender">
-              <Form.Label>Sender</Form.Label>
-              <Form.Control
-                type="text"
-                name="sender"
-                value={currentRow.sender}
-                onChange={handleInputChange}
-                placeholder="Enter sender"
-              />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formAlamat">
-              <Form.Label>Alamat</Form.Label>
-              <Form.Control
-                type="text"
-                name="alamat"
-                value={currentRow.alamat}
-                onChange={handleInputChange}
-                placeholder="Enter alamat"
-              />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formKeluhan">
-              <Form.Label>Keluhan</Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={3}
-                name="keluhan"
-                value={currentRow.keluhan}
-                onChange={handleInputChange}
-                placeholder="Enter keluhan"
-              />
-            </Form.Group>
+            {!editing && (
+              <>
+                <Form.Group className="mb-3" controlId="formSender">
+                  <Form.Label>Sender</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="sender"
+                    value={currentRow.sender}
+                    onChange={handleInputChange}
+                    placeholder="Enter sender"
+                    required
+                  />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formAlamat">
+                  <Form.Label>Alamat</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="alamat"
+                    value={currentRow.alamat}
+                    onChange={handleInputChange}
+                    placeholder="Enter alamat"
+                    required
+                  />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formKeluhan">
+                  <Form.Label>Keluhan</Form.Label>
+                  <Form.Control
+                    as="textarea"
+                    rows={3}
+                    name="keluhan"
+                    value={currentRow.keluhan}
+                    onChange={handleInputChange}
+                    placeholder="Enter keluhan"
+                    required
+                  />
+                </Form.Group>
+              </>
+            )}
             <Form.Group className="mb-3" controlId="formStatus">
               <Form.Label>Status</Form.Label>
               <Form.Control
@@ -147,6 +154,5 @@ function Keluhan() {
     </div>
   );
 }
-
 
 export default Keluhan;

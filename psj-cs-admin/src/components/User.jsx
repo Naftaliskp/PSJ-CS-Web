@@ -38,6 +38,15 @@ function User() {
     setData(data.filter(row => row.id !== id));
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (editing) {
+      handleUpdateRow();
+    } else {
+      handleAddRow();
+    }
+  };
+
   return (
     <div className="container my-5">
       <Button variant="primary" onClick={handleShow}>Tambah User</Button>
@@ -70,7 +79,7 @@ function User() {
           <Modal.Title>{editing ? 'Edit Row' : 'Add Row'}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form>
+          <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3" controlId="formEmail">
               <Form.Label>Email</Form.Label>
               <Form.Control
@@ -79,6 +88,7 @@ function User() {
                 value={currentRow.email}
                 onChange={handleInputChange}
                 placeholder="Enter email"
+                required
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formPassword">
@@ -89,18 +99,20 @@ function User() {
                 value={currentRow.password}
                 onChange={handleInputChange}
                 placeholder="Enter password"
+                required
               />
             </Form.Group>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleClose}>Close</Button>
+              <Button variant="primary" type="submit">
+                {editing ? 'Update' : 'Add'}
+              </Button>
+            </Modal.Footer>
           </Form>
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>Close</Button>
-          <Button variant="primary" onClick={editing ? handleUpdateRow : handleAddRow}>
-            {editing ? 'Update' : 'Add'}
-          </Button>
-        </Modal.Footer>
       </Modal>
     </div>
   );
 }
+
 export default User;

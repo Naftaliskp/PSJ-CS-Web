@@ -87,6 +87,7 @@ function Penghuni() {
                 value={currentRow.email}
                 onChange={handleInputChange}
                 placeholder="Enter email"
+                required
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formNama">
@@ -97,6 +98,7 @@ function Penghuni() {
                 value={currentRow.nama}
                 onChange={handleInputChange}
                 placeholder="Enter nama"
+                required
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formCluster">
@@ -107,6 +109,7 @@ function Penghuni() {
                 value={currentRow.cluster}
                 onChange={handleInputChange}
                 placeholder="Enter cluster"
+                required
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formBlok">
@@ -117,6 +120,7 @@ function Penghuni() {
                 value={currentRow.blok}
                 onChange={handleInputChange}
                 placeholder="Enter blok"
+                required
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formNoRumah">
@@ -127,6 +131,7 @@ function Penghuni() {
                 value={currentRow.noRumah}
                 onChange={handleInputChange}
                 placeholder="Enter no rumah"
+                required
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formTagihanIPL">
@@ -137,6 +142,7 @@ function Penghuni() {
                 value={currentRow.tagihanIPL}
                 onChange={handleInputChange}
                 placeholder="Enter tagihan IPL"
+                required
               />
             </Form.Group>
           </Form>

@@ -1,11 +1,42 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 
 function User() {
   const [data, setData] = useState([]);
   const [show, setShow] = useState(false);
-  const [currentRow, setCurrentRow] = useState({ id: null, email: '', password: '' });
+  const [currentRow, setCurrentRow] = useState({ Id: null, email: '', password: '' });
   const [editing, setEditing] = useState(false);
+
+  useEffect(() => {
+    dataUser();
+  }, []);
+
+  async function getData() {
+    return fetch('http://172.20.10.5:5000/api/user/', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(data => data.json())
+  }
+
+  const dataUser = async () => {
+    const response = await getData()
+    // console.log(response.data)
+    setData(response.data)
+  }
+
+  async function updatePwd(data) {
+    return fetch('http://172.20.10.5:5000/api/user/', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+    .then(data => data.json())
+  }
 
   const handleShow = () => setShow(true);
   const handleClose = () => setShow(false);
@@ -15,11 +46,11 @@ function User() {
     setCurrentRow({ ...currentRow, [name]: value });
   };
 
-  const handleAddRow = () => {
-    setData([...data, { ...currentRow, id: data.length + 1 }]);
-    setCurrentRow({ id: null, email: '', password: '' });
-    handleClose();
-  };
+  // const handleAddRow = () => {
+  //   setData([...data, { ...currentRow, id: data.length + 1 }]);
+  //   setCurrentRow({ id: null, email: '', password: '' });
+  //   handleClose();
+  // };
 
   const handleEditRow = (row) => {
     setCurrentRow(row);
@@ -27,29 +58,29 @@ function User() {
     handleShow();
   };
 
-  const handleUpdateRow = () => {
-    setData(data.map(row => (row.id === currentRow.id ? currentRow : row)));
-    setCurrentRow({ id: null, email: '', password: '' });
+  const handleUpdateRow = async () => {
+    const data = {
+      id_user: currentRow.Id,
+      pwd: currentRow.password
+    }
+    const response = await updatePwd(data)
+    console.log(response)
+    // setData(data.map(row => (row.id === currentRow.id ? currentRow : row)));
+    // setCurrentRow({ id: null, email: '', password: '' });
     setEditing(false);
     handleClose();
-  };
-
-  const handleDeleteRow = (id) => {
-    setData(data.filter(row => row.id !== id));
+    dataUser()
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (editing) {
       handleUpdateRow();
-    } else {
-      handleAddRow();
     }
   };
 
   return (
     <div className="container my-5">
-      <Button variant="primary" onClick={handleShow}>Tambah User</Button>
       <table className="table mt-3 mb-5">
         <thead>
           <tr>
@@ -61,13 +92,12 @@ function User() {
         </thead>
         <tbody>
           {data.map(row => (
-            <tr key={row.id}>
-              <td>{row.id}</td>
+            <tr key={row.Id}>
+              <td>{row.Id}</td>
               <td className="expand">{row.email}</td>
               <td>{row.password}</td>
               <td>
                 <Button variant="warning" onClick={() => handleEditRow(row)}>Edit</Button>
-                <Button variant="danger" onClick={() => handleDeleteRow(row.id)}>Delete</Button>
               </td>
             </tr>
           ))}
@@ -94,7 +124,7 @@ function User() {
             <Form.Group className="mb-3" controlId="formPassword">
               <Form.Label>Password</Form.Label>
               <Form.Control
-                type="password"
+                type="text"
                 name="password"
                 value={currentRow.password}
                 onChange={handleInputChange}

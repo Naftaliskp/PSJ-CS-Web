@@ -9,13 +9,14 @@ import Logo from '../assets/image/psj-logo.png'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import { FaSignInAlt, FaPenAlt, FaSignOutAlt, FaUser } from 'react-icons/fa'
+import useToken from '../useToken'
 
 const MySwal = withReactContent(Swal)
 
 const linkStyle = { color: '#dc3545', fontWeight: 'bold', borderBottom: '3px solid #dc3545', backgroundColor: '#FFFFFF' }
 function Navigation() {
 
-// const { token, setToken } = useToken();
+const { token, setToken } = useToken();
 
  const navigate = useNavigate()
  const dispatch = useDispatch();
@@ -31,14 +32,15 @@ function Navigation() {
       confirmButtonText: 'Ya, keluar!'
     }).then((result) => {
       if (result.isConfirmed) {
-        dispatch(clearSession(getCookie('token')));
-        cookieCutter.set("token","",{ expires: new Date(0) });
+        // dispatch(clearSession(getCookie('token')));
+        // cookieCutter.set("token","",{ expires: new Date(0) });
+        sessionStorage.clear()
         MySwal.fire({
           icon: 'success',
           title: 'Berhasil Logout!'
         }
         )
-        navigate('/');
+        navigate('/login');
       }
     })
 
@@ -59,10 +61,10 @@ function Navigation() {
               <NavLink to="/informasi" style={({isActive}) => (isActive ? linkStyle : undefined)} className='nav-item text-danger mb-1 mx-3' >  Informasi </NavLink>
               <NavLink to="/keluhan" style={({isActive}) => (isActive ? linkStyle : undefined)} className='nav-item text-danger mb-1 mx-3' >  Keluhan </NavLink>
                 {/* <NavLink className='nav-item text-dark p-2 me-3' to="#pricing">Profile</NavLink> */}
-                { session==false ? (
-                <NavLink to='/' className='btn btn-danger' ><FaSignInAlt className='me-2'/>Login</NavLink>
+                { !token ? (
+                <NavLink to='/login' className='btn btn-danger' ><FaSignInAlt className='me-2'/>Login</NavLink>
                 ): (
-                <Nav.Link onClick={ () => logout() } className='btn btn-danger text-light'><FaSignOutAlt className='me-2 '/>Logout</Nav.Link>
+                <Nav.Link onClick={ () => logout() } className='btn btn-danger'><FaSignOutAlt className='me-2 '/>Logout</Nav.Link>
                 ) }
                 
             </Nav>

@@ -1,11 +1,64 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 
 function Penghuni() {
   const [data, setData] = useState([]);
   const [show, setShow] = useState(false);
-  const [currentRow, setCurrentRow] = useState({ id: null, email: '', nama: '', cluster: '', blok: '', noRumah: '', tagihanIPL: '' });
+  const [currentRow, setCurrentRow] = useState({ id: null, email: '', nama: '', cluster: '', blok: '', no: '', tagihan: '' });
   const [editing, setEditing] = useState(false);
+
+  useEffect(() => {
+    dataPenghuni();
+  }, []);
+
+  async function getData() {
+    return fetch('http://172.20.10.5:5000/api/penghuni/', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(data => data.json())
+  }
+
+  const dataPenghuni = async () => {
+    const response = await getData()
+    // console.log(response.data)
+    setData(response.data)
+  }
+
+  async function updateData(data) {
+    return fetch('http://172.20.10.5:5000/api/penghuni/', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+    .then(data => data.json())
+  }
+
+  async function insertData(data) {
+    return fetch('http://172.20.10.5:5000/api/penghuni/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+    .then(data => data.json())
+  }
+
+  async function deleteData(id) {
+    return fetch('http://172.20.10.5:5000/api/penghuni/', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(id)
+    })
+    .then(data => data.json())
+  }
 
   const handleShow = () => setShow(true);
   const handleClose = () => setShow(false);
@@ -15,10 +68,22 @@ function Penghuni() {
     setCurrentRow({ ...currentRow, [name]: value });
   };
 
-  const handleAddRow = () => {
-    setData([...data, { ...currentRow, id: data.length + 1 }]);
-    setCurrentRow({ id: null, email: '', nama: '', cluster: '', blok: '', noRumah: '', tagihanIPL: '' });
+  const handleAddRow = async () => {
+    const data = {
+      id_penghuni: currentRow.Id_penghuni,
+      email: currentRow.email,
+      nama: currentRow.nama,
+      cluster: currentRow.cluster,
+      blok: currentRow.blok,
+      no_rumah: currentRow.no,
+      tagihan_ipl: currentRow.tagihan
+    }
+    const response = await insertData(data)
+    console.log(response)
+    // setData([...data, { ...currentRow, id: data.length + 1 }]);
+    setCurrentRow({ id: null, email: '', nama: '', cluster: '', blok: '', no: '', tagihan: '' });
     handleClose();
+    dataPenghuni()
   };
 
   const handleEditRow = (row) => {
@@ -27,15 +92,29 @@ function Penghuni() {
     handleShow();
   };
 
-  const handleUpdateRow = () => {
-    setData(data.map(row => (row.id === currentRow.id ? currentRow : row)));
-    setCurrentRow({ id: null, email: '', nama: '', cluster: '', blok: '', noRumah: '', tagihanIPL: '' });
+  const handleUpdateRow = async () => {
+    const data = {
+      id_penghuni: currentRow.Id_penghuni,
+      email: currentRow.email,
+      nama: currentRow.nama,
+      cluster: currentRow.cluster,
+      blok: currentRow.blok,
+      no_rumah: currentRow.no,
+      tagihan_ipl: currentRow.tagihan
+    }
+    const response = await updateData(data)
+    console.log(response)
+    // setData(data.map(row => (row.id === currentRow.id ? currentRow : row)));
+    // setCurrentRow({ id: null, email: '', nama: '', cluster: '', blok: '', no: '', tagihan: '' });
     setEditing(false);
     handleClose();
+    dataPenghuni();
   };
 
-  const handleDeleteRow = (id) => {
-    setData(data.filter(row => row.id !== id));
+  const handleDeleteRow = async (id_penghuni) => {
+    const response = await deleteData({id_penghuni})
+    // setData(data.filter(row => row.id !== id));
+    dataPenghuni();
   };
 
   return (
@@ -45,7 +124,7 @@ function Penghuni() {
         <thead>
           <tr>
             <th>ID</th>
-            <th>Email</th>
+            <th className="expand">Email</th>
             <th className="expand">Nama</th>
             <th>Cluster</th>
             <th>Blok</th>
@@ -56,17 +135,17 @@ function Penghuni() {
         </thead>
         <tbody>
           {data.map(row => (
-            <tr key={row.id}>
-              <td>{row.id}</td>
+            <tr key={row.Id_penghuni}>
+              <td>{row.Id_penghuni}</td>
               <td>{row.email}</td>
               <td className="expand">{row.nama}</td>
               <td>{row.cluster}</td>
               <td>{row.blok}</td>
-              <td>{row.noRumah}</td>
-              <td>{row.tagihanIPL}</td>
+              <td>{row.no}</td>
+              <td>{row.tagihan}</td>
               <td>
                 <Button variant="warning" onClick={() => handleEditRow(row)}>Edit</Button>
-                <Button variant="danger" onClick={() => handleDeleteRow(row.id)}>Delete</Button>
+                <Button variant="danger" onClick={() => handleDeleteRow(row.Id_penghuni)}>Delete</Button>
               </td>
             </tr>
           ))}
@@ -123,23 +202,23 @@ function Penghuni() {
                 required
               />
             </Form.Group>
-            <Form.Group className="mb-3" controlId="formNoRumah">
+            <Form.Group className="mb-3" controlId="formno">
               <Form.Label>No Rumah</Form.Label>
               <Form.Control
                 type="text"
-                name="noRumah"
-                value={currentRow.noRumah}
+                name="no"
+                value={currentRow.no}
                 onChange={handleInputChange}
                 placeholder="Enter no rumah"
                 required
               />
             </Form.Group>
-            <Form.Group className="mb-3" controlId="formTagihanIPL">
+            <Form.Group className="mb-3" controlId="formtagihan">
               <Form.Label>Tagihan IPL</Form.Label>
               <Form.Control
                 type="number"
-                name="tagihanIPL"
-                value={currentRow.tagihanIPL}
+                name="tagihan"
+                value={currentRow.tagihan}
                 onChange={handleInputChange}
                 placeholder="Enter tagihan IPL"
                 required

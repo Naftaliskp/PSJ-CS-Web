@@ -18,17 +18,25 @@ import Loading from './components/loader/Loading'
 
 
 function App() {
-  const dispatch = useDispatch();
-  const [isLoading, setIsLoading] = useState(true);
+//   const dispatch = useDispatch();
+//   const [isLoading, setIsLoading] = useState(true);
+
+// useEffect( () => {
+//   const token = getCookie('token');
+//   if(token) {
+//     dispatch(getSession(token, setIsLoading));
+//   }else {
+//     setIsLoading(false);
+//   }
+// },[] )
+const [ isLoading, setIsLoading ] = useState(true);
 
 useEffect( () => {
-  const token = getCookie('token');
-  if(token) {
-    dispatch(getSession(token, setIsLoading));
-  }else {
-    setIsLoading(false);
-  }
-},[] )
+  window.scrollTo(0, 0);
+    setTimeout( () => {
+      setIsLoading(false);
+    }, 1500 )
+}, [] )
 
   return (
     <>

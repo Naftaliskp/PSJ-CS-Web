@@ -9,8 +9,21 @@ import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import Navigation from '../../components/Navigation'
 import Footer from '../../components/Footer'
+import PropTypes from 'prop-types';
+import Dashboard from '../../components/Dashboard'
+import useToken from '../../useToken'
 
-const MySwal = withReactContent(Swal)
+
+async function loginUser(credentials) {
+    return fetch('http://172.20.10.5:5000/api/login/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(credentials)
+    })
+    .then(data => data.json())
+}
 
 function Login() {
     const navigate = useNavigate();
@@ -18,42 +31,28 @@ function Login() {
     const [ loading, setLoading ] = useState(false);
     const [ email, setEmail ] = useState();
     const [ password, setPassword ] = useState();
+    const { token, setToken } = useToken();
+    
+    if(token) {
+        navigate('/');
+    }
 
     useEffect( () => {
         window.scrollTo(0, 0);
     },[] )
 
-    const createSessionObj = async (email, password, form) => {
-       try{
-            setLoading(true);
-            const response = await axios.post('http://192.168.16.248/api/login/', {
-                "email": email,
-                "pwd": password
-            })
-            const data = response.data;
-            if(data.data) {
-                document.cookie = `token=${data.token}`;
-                dispatch(getSession(data.token));
-                            MySwal.fire({
-                                icon: 'success',
-                                title: 'Berhasil Login!',
-                            })
-                            navigate('/')
-                }else {
-                    return response;
-                }
-       } catch(error ){
-        MySwal.fire({
-            icon: 'warning',
-            title: error.response.data.message.msg || 'Akun tidak ditemukan, periksa kembali email dan passwordmu!',
-        })
-       } 
-        
-    }
-
-    const handleLogin = (e) => {
+    const handleLogin = async e => {
         e.preventDefault();
-        createSessionObj(email, password, e.target);
+        const response = await loginUser({
+            email,
+            pwd: password
+        });
+        if (response.token === "T0k3N4dm00n") {
+            setToken(response.token);
+        } else {
+            navigate('/login')
+        }
+        
     }
 
   return (
@@ -70,7 +69,7 @@ function Login() {
                                 <Form onSubmit={ handleLogin } >
                                     <Form.Group className='mb-5'>
                                         <div className='group'>
-                                            <input required type='email' onChange={ (e) => setEmail(e.target.value) } className='input w-100' />
+                                            <input required type='email' onChange={ e => setEmail(e.target.value) } className='input w-100' />
                                             <span className='highlight'></span>
                                             <span className='bar w-100'></span>
                                             <label className='label-input'>Email</label>
@@ -78,7 +77,7 @@ function Login() {
                                     </Form.Group>
                                     <Form.Group className='mb-4'>
                                         <div className='group'>
-                                            <input required type='password' onChange={ (e) => setPassword(e.target.value) } className='input w-100' />
+                                            <input required type='password' onChange={ e => setPassword(e.target.value) } className='input w-100' />
                                             <span className='highlight'></span>
                                             <span className='bar w-100'></span>
                                             <label className='label-input'>Password</label>
@@ -101,5 +100,9 @@ function Login() {
     </>
 )
 }
+
+Login.propTypes = {
+    setToken: PropTypes.func.isRequired
+  }
 
 export default Login

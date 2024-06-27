@@ -1,11 +1,55 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 
 function Informasi() {
   const [data, setData] = useState([]);
   const [show, setShow] = useState(false);
   const [currentRow, setCurrentRow] = useState({ id: null, judul: '', tanggal: '', isi: '' });
   const [editing, setEditing] = useState(false);
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    dataInformasi();
+  }, []);
+
+  async function getData() {
+    return fetch('http://172.20.10.5:5000/api/informasi/', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(data => data.json())
+  }
+
+  async function insertData(data) {
+    return fetch('http://172.20.10.5:5000/api/informasi/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+    .then(data => data.json())
+  }
+
+  async function deleteData(id) {
+    return fetch('http://172.20.10.5:5000/api/informasi/', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(id)
+    })
+    .then(data => data.json())
+  }
+
+  const dataInformasi = async () => {
+    const response = await getData()
+    // console.log(response.data)
+    setData(response.data)
+  }
 
   const handleShow = () => setShow(true);
   const handleClose = () => setShow(false);
@@ -15,22 +59,38 @@ function Informasi() {
     setCurrentRow({ ...currentRow, [name]: value });
   };
 
-  const handleAddRow = () => {
-    setData([...data, { ...currentRow, id: data.length + 1 }]);
+  const handleAddRow = async () => {
+    const data = {
+      judul: currentRow.judul,
+      isi: currentRow.isi,
+      // tanggal: datetime.datetime.now().strftime("%Y-%m-%d")
+    }
+    const response = await insertData(data)
+    console.log(response)
+    // setData([...data, { ...currentRow, id: data.length + 1 }]);
     setCurrentRow({ id: null, judul: '', tanggal: '', isi: '' });
     handleClose();
+    dataInformasi();
   };
 
 
-  const handleUpdateRow = () => {
-    setData(data.map(row => (row.id === currentRow.id ? currentRow : row)));
-    setCurrentRow({ id: null, judul: '', tanggal: '', isi: '' });
-    setEditing(false);
-    handleClose();
+  // const handleUpdateRow = () => {
+  //   setData(data.map(row => (row.id === currentRow.id ? currentRow : row)));
+  //   setCurrentRow({ id: null, judul: '', tanggal: '', isi: '' });
+  //   setEditing(false);
+  //   handleClose();
+  // };
+
+  const handleDeleteRow = async (id_informasi) => {
+    const response = await deleteData({id_informasi})
+    // setData(data.filter(row => row.id !== id));
+    dataInformasi();
   };
 
-  const handleDeleteRow = (id) => {
-    setData(data.filter(row => row.id !== id));
+  const handleChechInfoRow = (id_informasi) => {
+    navigate('/article?id='+id_informasi)
+    // setData(data.filter(row => row.id !== id));
+    // dataInformasi();
   };
 
   return (
@@ -39,23 +99,24 @@ function Informasi() {
       <table className="table my-3">
         <thead>
           <tr>
-            <th>Actions</th>
             <th>ID</th>
             <th>Judul</th>
             <th>Tanggal</th>
-            <th className="expand">Isi</th>
+            <th className="expand">Actions</th>
+            {/* <th className="expand">Isi</th> */}
           </tr>
         </thead>
         <tbody>
           {data.map(row => (
             <tr key={row.id}>
-              <td>
-                <Button variant="danger" onClick={() => handleDeleteRow(row.id)}>Delete</Button>
-              </td>
               <td>{row.id}</td>
               <td>{row.judul}</td>
-              <td>{row.tanggal}</td>
-              <td className="expand">{row.isi}</td>
+              <td>{new Date(row.tanggal).toDateString()}</td>
+              <td>
+                <Button variant="primary" onClick={() => handleChechInfoRow(row.id)}>Lihat Detail</Button>
+                <Button variant="danger" onClick={() => handleDeleteRow(row.id)}>Delete</Button>
+              </td>
+              {/* <td className="expand">{row.isi}</td> */}
             </tr>
           ))}
         </tbody>
@@ -78,7 +139,7 @@ function Informasi() {
                 required
               />
             </Form.Group>
-            <Form.Group className="mb-3" controlId="formTanggal">
+            {/* <Form.Group className="mb-3" controlId="formTanggal">
               <Form.Label>Tanggal</Form.Label>
               <Form.Control
                 type="date"
@@ -88,7 +149,7 @@ function Informasi() {
                 placeholder="Enter tanggal"
                 required
               />
-            </Form.Group>
+            </Form.Group> */}
             <Form.Group className="mb-3" controlId="formIsi">
               <Form.Label>Isi</Form.Label>
               <Form.Control

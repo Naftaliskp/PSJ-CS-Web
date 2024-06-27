@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import Penghuni from '../../components/Penghuni'
+// import Penghuni from '../../components/Penghuni'
 import Loading from '../../components/loader/Loading'
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
@@ -9,9 +9,9 @@ import useToken from '../../useToken';
 
 const MySwal = withReactContent(Swal);
 
-function Userpage() {
+function Dashboard() {
   const navigate = useNavigate();
-  const { session } = useSelector(state => state.userSession);
+  // const { session } = useSelector(state => state.userSession);
   const [isLoading, setIsLoading] = useState(true);
   const { token, setToken } = useToken()
 
@@ -38,10 +38,11 @@ function Userpage() {
           <Loading/>
         ): (
           <>
-            <Penghuni/>
+            {/* <Penghuni/> */}
+            Dashboard
           </>
         ) }
     </>
   )
 }
-export default Userpage
+export default Dashboard

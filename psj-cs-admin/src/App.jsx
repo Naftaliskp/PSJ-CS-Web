@@ -11,33 +11,44 @@ import Article from './page/information/Article'
 import Keluhan from './page/keluhan/keluhanpage'
 import Footer from './components/Footer'
 import Navigation from './components/Navigation'
+import Dashboard from './components/Dashboard'
 import { useSelector, useDispatch } from 'react-redux'
 import { getSession } from './redux/action/userSession'
 import { getCookie } from './cookie/cookie'
 import Loading from './components/loader/Loading'
+import useToken from './useToken';
 
 function App() {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(true);
+  // const [token, setToken] = useState(null);
+  const { token, setToken } = useToken();
 
-useEffect( () => {
-  const token = getCookie('token');
-  if(token) {
-    dispatch(getSession(token, setIsLoading));
-  }else {
-    setIsLoading(false);
-  }
-},[] )
+  console.log("app "+token)
+
+  // if(!token) {
+  //   return <Login setToken={setToken} />
+  // }
+
+// useEffect( () => {
+//   const token = getCookie('token');
+//   if(!token) {
+//     dispatch(getSession(token, setIsLoading));
+//   } else {
+//     setIsLoading(false);
+//   }
+// },[] )
 
   return (
     <>
-    { isLoading ? (
+    { false ? (
       <Loading/>
     ) : (
     <div className="App">
         <Navigation/>
           <Routes>
-              <Route path='/' element={<Login/>} />
+              <Route path='/' element={<Dashboard/>} />
+              <Route path='/login' element={<Login/>} />
               <Route path='/penghuni' element={<Penghuni/>} />
               <Route path='/informasi' element={<Informasi/>}/>
               <Route path='/keluhan' element={<Keluhan/>}/>

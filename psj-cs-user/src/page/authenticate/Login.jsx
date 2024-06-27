@@ -1,76 +1,88 @@
-import React, { useState, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
-import { getSession } from '../../redux/action/userSession'
-import { Container, Row, Card, Col, Form, Button } from 'react-bootstrap'
-import Logo from '../../assets/image/psj-logo.png'
-import axios from 'axios'
-import Swal from 'sweetalert2'
-import withReactContent from 'sweetalert2-react-content'
-import Navigation from '../../components/Navigation'
-import Footer from '../../components/Footer'
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { getSession } from '../../redux/action/userSession';
+import { Container, Row, Card, Col, Form, Button } from 'react-bootstrap';
+import Logo from '../../assets/image/psj-logo.png';
+import axios from 'axios';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+import Navigation from '../../components/Navigation';
+import Footer from '../../components/Footer';
 
-const MySwal = withReactContent(Swal)
+const MySwal = withReactContent(Swal);
 
 function Login() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const [ loading, setLoading ] = useState(false);
-    const [ email, setEmail ] = useState();
-    const [ password, setPassword ] = useState();
+    const [loading, setLoading] = useState(false);
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
 
-    useEffect( () => {
+    useEffect(() => {
         window.scrollTo(0, 0);
-    },[] )
+    }, []);
 
-    const createSessionObj = async (email, password, form) => {
-       try{
+    const createSessionObj = async (email, password) => {
+        try {
             setLoading(true);
-            const response = await axios.post('http://192.168.16.248/api/login/', {
-                "email": email,
-                "pwd": password
-            })
+            const response = await axios.post('http://192.168.16.195:3000/api/login/', {
+                email,
+                pwd: password
+            });
             const data = response.data;
-            if(data.data) {
+            if (data.data) {
                 document.cookie = `token=${data.token}`;
                 dispatch(getSession(data.token));
-                            MySwal.fire({
-                                icon: 'success',
-                                title: 'Berhasil Login!',
-                            })
-                            navigate('/')
-                }else {
-                    return response;
-                }
-       } catch(error ){
-        MySwal.fire({
-            icon: 'warning',
-            title: error.response.data.message.msg || 'Akun tidak ditemukan, periksa kembali email dan passwordmu!',
-        })
-       } 
-        
-    }
+                MySwal.fire({
+                    icon: 'success',
+                    title: 'Berhasil Login!',
+                });
+                navigate('/');
+            } else {
+                MySwal.fire({
+                    icon: 'error',
+                    title: 'Login Gagal',
+                    text: 'Akun tidak ditemukan, periksa kembali email dan passwordmu!',
+                });
+            }
+        } catch (error) {
+            MySwal.fire({
+                icon: 'warning',
+                title: error.response?.data?.message || 'Akun tidak ditemukan, periksa kembali email dan passwordmu!',
+            });
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const handleLogin = (e) => {
         e.preventDefault();
-        createSessionObj(email, password, e.target);
-    }
+        createSessionObj(email, password);
+    };
 
-  return (
-    <>
-        <Container fluid className='authenticate py-5' >
+    return (
+        <>
+            <Container fluid className='authenticate py-5'>
                 <Row>
-                    <Card className='col-12 col-sm-10 mx-auto rounded shadow-lg' >
+                    <Card className='col-12 col-sm-10 mx-auto rounded shadow-lg'>
                         <Row className='d-flex justify-content-start'>
                             <Col xs={10} md={5} className='p-3 mx-auto'>
                                 <div className='text-center my-3'>
-                                    <img src={Logo} width='150' />
+                                    <img src={Logo} width='150' alt="Logo" />
                                     <h1 className='fw-bolder text-dark mt-2'>LOGIN</h1>
                                 </div>
-                                <Form onSubmit={ handleLogin } >
+                                <Form onSubmit={handleLogin}>
                                     <Form.Group className='mb-5'>
                                         <div className='group'>
-                                            <input required type='email' onChange={ (e) => setEmail(e.target.value) } className='input w-100' />
+                                            <input
+                                                required
+                                                type='email'
+                                                onChange={(e) => setEmail(e.target.value)}
+                                                className='input w-100'
+                                                value={email}
+                                                disabled={loading}
+                                            />
                                             <span className='highlight'></span>
                                             <span className='bar w-100'></span>
                                             <label className='label-input'>Email</label>
@@ -78,7 +90,14 @@ function Login() {
                                     </Form.Group>
                                     <Form.Group className='mb-4'>
                                         <div className='group'>
-                                            <input required type='password' onChange={ (e) => setPassword(e.target.value) } className='input w-100' />
+                                            <input
+                                                required
+                                                type='password'
+                                                onChange={(e) => setPassword(e.target.value)}
+                                                className='input w-100'
+                                                value={password}
+                                                disabled={loading}
+                                            />
                                             <span className='highlight'></span>
                                             <span className='bar w-100'></span>
                                             <label className='label-input'>Password</label>
@@ -86,20 +105,20 @@ function Login() {
                                     </Form.Group>
                                     <Form.Group className='mb-5'>
                                         <Link>
-                                        <p className='text-danger'>Lupa Password?</p>
+                                            <p className='text-danger'>Lupa Password?</p>
                                         </Link>
-                                        <Button variant='danger' type='submit' className='w-100 mb-2'>Log in</Button>
-                                        {/* <Link to='/' className='btn btn-danger w-100 mb-2'>Sign-in</Link> */}
+                                        <Button variant='danger' type='submit' className='w-100 mb-2' disabled={loading}>
+                                            {loading ? 'Loading...' : 'Log in'}
+                                        </Button>
                                     </Form.Group>
                                 </Form>
                             </Col>
                         </Row>
                     </Card>
                 </Row>
-        </Container>
-
-    </>
-)
+            </Container>
+        </>
+    );
 }
 
-export default Login
+export default Login;

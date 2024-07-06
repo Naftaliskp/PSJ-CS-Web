@@ -14,10 +14,7 @@ const API_KEY_ARTICLE = 'https://6350c3703e9fa1244e4c9abd.mockapi.io/bangkit/art
 const API_KEY_NEWS = 'https://apicovid19indonesia-v2.vercel.app/api/indonesia/provinsi/more';
 
 //Key Session
-const KEY_SESSION = 'add_session';
+const BASE_URL = 'http://192.168.100.52:5000';
 
 
-export { API_KEY_USER, API_KEY_COMPANY, KEY_SESSION, API_KEY_INFORMATION, API_KEY_ARTICLE,
-    
-    
-    API_KEY_NEWS, API_KEY_REGISTER, API_KEY_REGISTER_COMPANY, API_KEY_LOGIN, API_KEY_LOGOUT, API_KEY_JOBS, API_KEY_EDIT_USER };
+export { BASE_URL };

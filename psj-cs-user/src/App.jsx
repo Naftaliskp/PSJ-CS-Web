@@ -10,37 +10,30 @@ import Footer from './components/Footer'
 import Pengaduan from './page/pengaduan/Pengaduanpage'
 import CekData from './page/homepage/CekDataPage'
 import Navigation from './components/Navigation'
-import useToken from './page/homepage/useToken'
 import { useSelector, useDispatch } from 'react-redux'
 import { getSession } from './redux/action/userSession'
 import { getCookie } from './cookie/cookie'
 import Loading from './components/loader/Loading'
+import useToken from './useToken';
 
 
 function App() {
 //   const dispatch = useDispatch();
 //   const [isLoading, setIsLoading] = useState(true);
 
-// useEffect( () => {
-//   const token = getCookie('token');
-//   if(token) {
-//     dispatch(getSession(token, setIsLoading));
-//   }else {
-//     setIsLoading(false);
-//   }
-// },[] )
-const [ isLoading, setIsLoading ] = useState(true);
+  const [ isLoading, setIsLoading ] = useState(true);
 
-useEffect( () => {
-  window.scrollTo(0, 0);
-    setTimeout( () => {
-      setIsLoading(false);
-    }, 1500 )
-}, [] )
+  const { token, setToken } = useToken();
+
+  console.log("app "+token)
+
+  // if(!token) {
+  //   return <Login setToken={setToken} />
+  // }
 
   return (
     <>
-    { isLoading ? (
+    { false ? (
       <Loading/>
     ) : (
     <div className="App">

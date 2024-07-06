@@ -26,9 +26,9 @@ function App() {
 
   console.log("app "+token)
 
-  // if(!token) {
-  //   return <Login setToken={setToken} />
-  // }
+  if(!token) {
+    return <Login setToken={setToken} />
+  }
 
 // useEffect( () => {
 //   const token = getCookie('token');

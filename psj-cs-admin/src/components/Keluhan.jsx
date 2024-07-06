@@ -12,7 +12,7 @@ function Keluhan() {
   }, []);
 
   async function getData() {
-    return fetch('http://172.20.10.5:5000/api/keluhan/', {
+    return fetch('http://192.168.100.52:5000/api/keluhan/', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
@@ -28,7 +28,7 @@ function Keluhan() {
   }
 
   async function updateStatus(data) {
-    return fetch('http://172.20.10.5:5000/api/keluhan/', {
+    return fetch('http://192.168.100.52:5000/api/keluhan/', {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'

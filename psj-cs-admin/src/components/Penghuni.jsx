@@ -12,7 +12,7 @@ function Penghuni() {
   }, []);
 
   async function getData() {
-    return fetch('http://172.20.10.5:5000/api/penghuni/', {
+    return fetch('http://192.168.100.52:5000/api/penghuni/', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
@@ -28,7 +28,7 @@ function Penghuni() {
   }
 
   async function updateData(data) {
-    return fetch('http://172.20.10.5:5000/api/penghuni/', {
+    return fetch('http://192.168.100.52:5000/api/penghuni/', {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
@@ -39,7 +39,7 @@ function Penghuni() {
   }
 
   async function insertData(data) {
-    return fetch('http://172.20.10.5:5000/api/penghuni/', {
+    return fetch('http://192.168.100.52:5000/api/penghuni/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -50,7 +50,7 @@ function Penghuni() {
   }
 
   async function deleteData(id) {
-    return fetch('http://172.20.10.5:5000/api/penghuni/', {
+    return fetch('http://192.168.100.52:5000/api/penghuni/', {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json'

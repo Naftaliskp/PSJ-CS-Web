@@ -12,7 +12,7 @@ function User() {
   }, []);
 
   async function getData() {
-    return fetch('http://172.20.10.5:5000/api/user/', {
+    return fetch('http://192.168.100.52:5000/api/user/', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
@@ -28,7 +28,7 @@ function User() {
   }
 
   async function updatePwd(data) {
-    return fetch('http://172.20.10.5:5000/api/user/', {
+    return fetch('http://192.168.100.52:5000/api/user/', {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'

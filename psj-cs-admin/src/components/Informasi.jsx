@@ -14,7 +14,7 @@ function Informasi() {
   }, []);
 
   async function getData() {
-    return fetch('http://172.20.10.5:5000/api/informasi/', {
+    return fetch('http://192.168.100.52:5000/api/informasi/', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
@@ -24,7 +24,7 @@ function Informasi() {
   }
 
   async function insertData(data) {
-    return fetch('http://172.20.10.5:5000/api/informasi/', {
+    return fetch('http://192.168.100.52:5000/api/informasi/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -35,7 +35,7 @@ function Informasi() {
   }
 
   async function deleteData(id) {
-    return fetch('http://172.20.10.5:5000/api/informasi/', {
+    return fetch('http://192.168.100.52:5000/api/informasi/', {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json'
@@ -96,7 +96,7 @@ function Informasi() {
   return (
     <div className="container mt-3 mb-5">
       <Button variant="primary" onClick={handleShow}>Tambah Informasi</Button>
-      <table className="table my-3">
+      <table id="example" className="table my-3">
         <thead>
           <tr>
             <th>ID</th>

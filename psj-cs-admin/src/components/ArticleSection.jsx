@@ -10,7 +10,7 @@ function ArticleSection() {
     }, []);
 
     async function getDataById(id) {
-        return fetch('http://192.168.100.52:5000/api/informasi/?id='+id, {
+        return fetch('http://172.20.10.5:5000/api/informasi/?id='+id, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'

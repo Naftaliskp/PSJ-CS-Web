@@ -16,7 +16,7 @@ import { BASE_URL } from '../../env/env'
 
 
 async function loginUser(credentials) {
-    return fetch('http://192.168.100.52:5000/api/login/', {
+    return fetch('http://172.20.10.5:5000/api/login/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

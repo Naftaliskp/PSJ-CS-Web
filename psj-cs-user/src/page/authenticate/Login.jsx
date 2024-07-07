@@ -13,9 +13,10 @@ import PropTypes from 'prop-types';
 import useToken from '../../useToken'
 // import { BASE_URL } from '../../env/env'
 
+const url = 'http:'+(window.location.href).split(':')[1]+':5000'
 
 async function loginUser(credentials) {
-    return fetch('http://127.0.0.1:5000/api/login/', {
+    return fetch(url+'/api/login/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

@@ -4,6 +4,8 @@ import $ from 'jquery';
 import 'datatables.net-bs5';
 import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
 
+const url = 'http:'+(window.location.href).split(':')[1]+':5000'
+
 function Keluhan() {
   const [data, setData] = useState([]);
   const [show, setShow] = useState(false);
@@ -28,7 +30,7 @@ function Keluhan() {
   }, [data]);
 
   async function getData() {
-    return fetch('http://172.20.10.5:5000/api/keluhan/', {
+    return fetch(url+'/api/keluhan/', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -37,7 +39,7 @@ function Keluhan() {
   }
 
   async function updateStatus(data) {
-    return fetch('http://172.20.10.5:5000/api/keluhan/', {
+    return fetch(url+'/api/keluhan/', {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

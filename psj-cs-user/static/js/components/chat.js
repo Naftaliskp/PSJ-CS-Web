@@ -237,7 +237,7 @@ async function send(message) {
   console.log(message);
   await new Promise((r) => setTimeout(r, 2000));
   $.ajax({
-    url: "http://192.168.100.52:5000/api/chat/",
+    url: "http://127.0.0.1:5000/api/chat/",
     type: "POST",
     contentType: "application/json",
     data: JSON.stringify({ user_input: message}),
@@ -277,7 +277,7 @@ async function send(message) {
 // eslint-disable-next-line no-unused-vars
 function actionTrigger() {
   $.ajax({
-    url: "http://192.168.100.52:5000/api/chat/",
+    url: "http://127.0.0.1:5000/api/chat/",
     type: "POST",
     contentType: "application/json",
     data: JSON.stringify({
@@ -312,7 +312,7 @@ function actionTrigger() {
 // eslint-disable-next-line no-unused-vars
 function customActionTrigger() {
   $.ajax({
-    url: "http://192.168.100.52:5000/api/chat/",
+    url: "http://127.0.0.1:5000/api/chat/",
     type: "POST",
     contentType: "application/json",
     data: JSON.stringify({

@@ -1,4 +1,5 @@
-const url = 'http://192.168.100.52:5000'
+const url = 'http:'+(window.location.href).split(':')[1]+':5000'
+console.log('http:'+(window.location.href).split(':')[1]+':5000')
 /**
  * scroll to the bottom of the chats after new message has been added to chat
  */

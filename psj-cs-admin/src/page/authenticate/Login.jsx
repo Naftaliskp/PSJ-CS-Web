@@ -14,9 +14,10 @@ import Dashboard from '../../components/Dashboard'
 import useToken from '../../useToken'
 import { BASE_URL } from '../../env/env'
 
+const url = 'http:'+(window.location.href).split(':')[1]+':5000'
 
 async function loginUser(credentials) {
-    return fetch('http://172.20.10.5:5000/api/login/', {
+    return fetch(url+'/api/login/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -34,7 +35,7 @@ function Login() {
     const [ password, setPassword ] = useState();
     const { token, setToken } = useToken();
     
-    if(token) {
+    if(token && token === "T0k3N4dm00n") {
         navigate('/');
     }
 

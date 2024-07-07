@@ -4,6 +4,8 @@ import $ from 'jquery';
 import 'datatables.net-bs5';
 import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
 
+const url = 'http:'+(window.location.href).split(':')[1]+':5000'
+
 function Penghuni() {
   const [data, setData] = useState([]);
   const [show, setShow] = useState(false);
@@ -28,7 +30,7 @@ function Penghuni() {
   }, [data]);
 
   async function getData() {
-    return fetch('http://172.20.10.5:5000/api/penghuni/', {
+    return fetch(url+'/api/penghuni/', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
@@ -43,7 +45,7 @@ function Penghuni() {
   };
 
   async function updateData(data) {
-    return fetch('http://172.20.10.5:5000/api/penghuni/', {
+    return fetch(url+'/api/penghuni/', {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
@@ -54,7 +56,7 @@ function Penghuni() {
   }
 
   async function insertData(data) {
-    return fetch('http://172.20.10.5:5000/api/penghuni/', {
+    return fetch(url+'/api/penghuni/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -65,7 +67,7 @@ function Penghuni() {
   }
 
   async function deleteData(id) {
-    return fetch('http://172.20.10.5:5000/api/penghuni/', {
+    return fetch(url+'/api/penghuni/', {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json'

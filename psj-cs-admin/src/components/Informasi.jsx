@@ -5,6 +5,8 @@ import $ from 'jquery';
 import 'datatables.net-bs5';
 import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
 
+const url = 'http:'+(window.location.href).split(':')[1]+':5000'
+
 function Informasi() {
   const [data, setData] = useState([]);
   const [show, setShow] = useState(false);
@@ -30,7 +32,7 @@ function Informasi() {
   }, [data]);
 
   async function getData() {
-    return fetch('http://172.20.10.5:5000/api/informasi/', {
+    return fetch(url+'/api/informasi/', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -39,7 +41,7 @@ function Informasi() {
   }
 
   async function insertData(data) {
-    return fetch('http://172.20.10.5:5000/api/informasi/', {
+    return fetch(url+'/api/informasi/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -49,7 +51,7 @@ function Informasi() {
   }
 
   async function deleteData(id) {
-    return fetch('http://172.20.10.5:5000/api/informasi/', {
+    return fetch(url+'/api/informasi/', {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -112,12 +114,8 @@ function Informasi() {
               <td>{row.judul}</td>
               <td>{new Date(row.tanggal).toDateString()}</td>
               <td>
-                <Button variant="primary" onClick={() => handleChechInfoRow(row.id)}>
-                  Lihat Detail
-                </Button>
-                <Button variant="danger" onClick={() => handleDeleteRow(row.id)}>
-                  Delete
-                </Button>
+                <Button variant="primary" onClick={() => handleCheckInfoRow(row.id)}>Lihat Detail</Button>
+                <Button variant="danger" onClick={() => handleDeleteRow(row.id)}>Delete</Button>
               </td>
             </tr>
           ))}

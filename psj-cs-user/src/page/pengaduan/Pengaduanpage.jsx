@@ -22,10 +22,10 @@ function Pengaduanpage() {
         setIsLoading(false);
     }, 1500);
 
-    if (!token || token !== "T0k3N4dm00n") {
+    if (!token) {
       MySwal.fire({
           icon: 'warning',
-          title: 'Maaf, untuk dapat lanjut anda harus login dan memiliki akses admin terlebih dahulu!',
+          title: 'Maaf, untuk dapat lanjut anda harus login terlebih dahulu!',
           showConfirmButton: true,
           didClose: () => {
               navigate('/login');

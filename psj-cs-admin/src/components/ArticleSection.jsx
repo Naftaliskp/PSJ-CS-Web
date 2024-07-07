@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Container, Row, Col } from 'react-bootstrap'
 
+const url = 'http:'+(window.location.href).split(':')[1]+':5000'
 
 function ArticleSection() {
     const [data, setData] = useState([]);
@@ -10,7 +11,7 @@ function ArticleSection() {
     }, []);
 
     async function getDataById(id) {
-        return fetch('http://172.20.10.5:5000/api/informasi/?id='+id, {
+        return fetch(url+'/api/informasi/?id='+id, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'

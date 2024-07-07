@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { Col, Row, Form, FloatingLabel } from 'react-bootstrap'
 import Contact from '../assets/png/conyact.png'
 
+const url = 'http:'+(window.location.href).split(':')[1]+':5000'
+
 function SectionPengaduan() {
   const [currentRow, setCurrentRow] = useState({ alamat_keluhan: '', keluhan: '' });
   
@@ -11,7 +13,7 @@ function SectionPengaduan() {
   };
 
   async function insertData(data) {
-    return fetch('http://127.0.0.1:5000/api/keluhan/', {
+    return fetch(url+'/api/keluhan/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

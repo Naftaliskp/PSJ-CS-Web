@@ -4,6 +4,8 @@ import $ from 'jquery';
 import 'datatables.net-bs5';
 import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
 
+const url = 'http:'+(window.location.href).split(':')[1]+':5000'
+
 function User() {
   const [data, setData] = useState([]);
   const [show, setShow] = useState(false);
@@ -28,7 +30,7 @@ function User() {
   }, [data]);
 
   async function getData() {
-    return fetch('http://172.20.10.5:5000/api/user/', {
+    return fetch(url+'/api/user/', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -42,7 +44,7 @@ function User() {
   };
 
   async function updatePwd(data) {
-    return fetch('http://172.20.10.5:5000/api/user/', {
+    return fetch(url+'/api/user/', {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

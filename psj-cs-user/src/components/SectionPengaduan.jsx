@@ -25,7 +25,7 @@ function SectionPengaduan() {
 
   const handleAddRow = async () => {
     const data = {
-      id_sender: sessionStorage.getItem('Id_penghuni'),
+      id_sender: parseInt(sessionStorage.getItem("Id_penghuni")),
       alamat_keluhan: currentRow.alamat_keluhan,
       keluhan: currentRow.keluhan
     }

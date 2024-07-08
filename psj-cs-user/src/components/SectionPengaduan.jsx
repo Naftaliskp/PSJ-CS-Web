@@ -31,7 +31,7 @@ function SectionPengaduan() {
     }
     const response = await insertData(data)
     console.log(response)
-    setCurrentRow({ id: null, judul: '', tanggal: '', isi: '' });
+    setCurrentRow({ alamat_keluhan: '', keluhan: '' });
   };
 
   return (

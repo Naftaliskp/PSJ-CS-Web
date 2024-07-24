@@ -40,6 +40,7 @@ function Dashboard() {
           <>
             {/* <Penghuni/> */}
             Dashboard
+            <h3>Anda telah berhasil login sebagai Admin</h3>
           </>
         ) }
     </>

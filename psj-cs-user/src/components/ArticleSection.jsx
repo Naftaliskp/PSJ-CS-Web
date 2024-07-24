@@ -11,7 +11,7 @@ function ArticleSection() {
     }, []);
 
     async function getDataById(id) {
-        return fetch(+url+'/api/informasi/?id='+id, {
+        return fetch(url+'/api/informasi/?id='+id, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'

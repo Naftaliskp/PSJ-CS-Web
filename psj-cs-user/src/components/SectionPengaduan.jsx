@@ -16,22 +16,27 @@ function SectionPengaduan() {
     return fetch(url+'/api/keluhan/', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify(data)
-    })
-    .then(data => data.json())
+      body: JSON.stringify(data),
+    }).then((data) => data.json());
   }
 
-  const handleAddRow = async () => {
+  const handleAddRow = async (e) => {
+    e.preventDefault();
     const data = {
-      id_sender: sessionStoragesessionStorage.getItem('Id_penghuni'),
-      alamat_keluhan: currentRow.alamat_keluhan,
+      id_sender: parseInt(sessionStorage.getItem("Id_penghuni")),
+      alamat: currentRow.alamat_keluhan,
       keluhan: currentRow.keluhan
     }
     const response = await insertData(data)
-    console.log(response)
-    setCurrentRow({ id: null, judul: '', tanggal: '', isi: '' });
+    console.log(response);
+    if(response.data_inserted == 1) {
+      alert('keluhan berhasil dikirim')
+    } else {
+      alert('keluhan gagal dikirim')
+    }
+    setCurrentRow({ alamat_keluhan: '', keluhan: '' });
   };
 
   return (

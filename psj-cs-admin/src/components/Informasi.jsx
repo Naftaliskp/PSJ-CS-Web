@@ -89,7 +89,7 @@ function Informasi() {
     dataInformasi();
   };
 
-  const handleChechInfoRow = (id_informasi) => {
+  const handleCheckInfoRow = (id_informasi) => {
     navigate('/article?id=' + id_informasi);
   };
 
